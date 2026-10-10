@@ -1,0 +1,8 @@
+# Generated local timestamp files (when saving inside the repository)
+*_20??-??-??_??-??-??.txt
+
+# Editor / OS junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
