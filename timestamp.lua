@@ -378,28 +378,28 @@ local function poll_title()
 end
 
 function script_description()
-    return "Сохраняет таймкоды OBS по горячей клавише. Папка выбирается в настройках. " ..
-        "Название файла: дата, ручное название или автоматически по ссылке на " ..
-        "трансляцию YouTube/Twitch/Kick и другие сервисы с помощью yt-dlp.exe " ..
-        "(Windows). При сбое определения названия таймкоды всё равно сохраняются."
+    return "Save timestamp markers during a stream or recording using an OBS hotkey. " ..
+        "Choose an output folder and a filename based on the date, a custom title, " ..
+        "or the live stream title retrieved with yt-dlp.exe (Windows). " ..
+        "If title lookup fails, timestamp markers are still saved."
 end
 
 function script_properties()
     local props = obs.obs_properties_create()
-    obs.obs_properties_add_int(props, "offset", "Смещение времени (секунды)", -3600, 3600, 1)
-    obs.obs_properties_add_path(props, "save_dir", "Папка для таймкодов",
+    obs.obs_properties_add_int(props, "offset", "Time Offset (seconds)", -3600, 3600, 1)
+    obs.obs_properties_add_path(props, "save_dir", "Timestamp Output Folder",
         obs.OBS_PATH_DIRECTORY, "", nil)
-    local modes = obs.obs_properties_add_list(props, "naming_mode", "Имя файла",
+    local modes = obs.obs_properties_add_list(props, "naming_mode", "Filename Mode",
         obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_STRING)
-    obs.obs_property_list_add_string(modes, "Автоматически по ссылке (yt-dlp)", "auto")
-    obs.obs_property_list_add_string(modes, "Название вручную", "manual")
-    obs.obs_property_list_add_string(modes, "Только дата (как раньше)", "date")
-    obs.obs_properties_add_text(props, "manual_title", "Название / запасное название",
+    obs.obs_property_list_add_string(modes, "Automatic from Stream URL (yt-dlp)", "auto")
+    obs.obs_property_list_add_string(modes, "Manual Title", "manual")
+    obs.obs_property_list_add_string(modes, "Date Only", "date")
+    obs.obs_properties_add_text(props, "manual_title", "Title / Fallback Title",
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(props, "channel_url",
-        "Ссылка на канал или эфир (для авто)", obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_path(props, "ytdlp_path", "yt-dlp.exe (для авто, Windows)",
-        obs.OBS_PATH_FILE, "Программы (*.exe);;Все файлы (*.*)", nil)
+        "Stream or Channel URL (automatic mode)", obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_path(props, "ytdlp_path", "yt-dlp.exe (automatic mode, Windows)",
+        obs.OBS_PATH_FILE, "Executables (*.exe);;All files (*.*)", nil)
     return props
 end
 
@@ -465,7 +465,7 @@ end
 
 function script_load(settings)
     hotkey_id = obs.obs_hotkey_register_frontend(
-        "save_timestamp_hotkey", "Сохранить таймкод", on_hotkey)
+        "save_timestamp_hotkey", "Save Timestamp", on_hotkey)
     local saved = obs.obs_data_get_array(settings, "save_timestamp_hotkey")
     if saved then
         obs.obs_hotkey_load(hotkey_id, saved)

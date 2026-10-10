@@ -75,18 +75,18 @@ end
 
 function script_description()
     return [[
-Звуковое уведомление после сохранения повтора OBS (Replay Buffer).
+Play a notification sound when OBS saves a Replay Buffer clip.
 
-1. Выберите аудиофайл (WAV, MP3, OGG, FLAC и др.).
-2. Установите громкость.
-3. Нажмите «Проверить звук».
+1. Select an audio file (WAV, MP3, OGG, FLAC, etc.).
+2. Adjust the volume.
+3. Click "Test Sound" to preview the notification.
 
-Звук отправляется на устройство мониторинга:
-Настройки OBS > Аудио > Дополнительно > Устройство мониторинга.
-Он не отправляется напрямую на аудиодорожки OBS.
+The sound is sent to your OBS monitoring device:
+Settings > Audio > Advanced > Monitoring Device.
+It is not sent directly to OBS recording or streaming audio tracks.
 
-Если OBS захватывает системный звук с того же устройства,
-уведомление может попасть в запись через захват звука рабочего стола.
+If OBS captures desktop audio from the same device, the notification
+may still be included in your recording or stream through desktop audio capture.
 ]]
 end
 
@@ -96,19 +96,19 @@ function script_properties()
     obs.obs_properties_add_path(
         properties,
         "sound_file",
-        "Звуковой файл",
+        "Sound File",
         obs.OBS_PATH_FILE,
         "Audio files (*.wav *.mp3 *.ogg *.flac *.aac *.m4a *.wma);;All files (*.*)",
         nil
     )
 
     local slider = obs.obs_properties_add_int_slider(
-        properties, "volume_percent", "Громкость", 0, 100, 1
+        properties, "volume_percent", "Volume", 0, 100, 1
     )
     obs.obs_property_int_set_suffix(slider, "%")
 
     obs.obs_properties_add_button(
-        properties, "test_sound", "Проверить звук", test_sound_clicked
+        properties, "test_sound", "Test Sound", test_sound_clicked
     )
 
     return properties
